@@ -1,42 +1,58 @@
-// Create the canvas
+// 1. Create the canvas
+
 var canvas = document.createElement("canvas");
 var ctx = canvas.getContext("2d");
-canvas.width = 512;
-canvas.height = 480;
+canvas.width= 512;
+canvas.height= 480;
 document.body.appendChild(canvas);
 
-// Background image
-var bgReady = false;
+// 2. Include Images
+// background image
+
+var bgready = false;
 var bgImage = new Image();
 bgImage.onload = function () {
-	bgReady = true;
+	bgready = true;
 };
-bgImage.src = "images/background.png";
+bgImage.src = "images/background_space.png";
 
 // Hero image
+
 var heroReady = false;
 var heroImage = new Image();
 heroImage.onload = function () {
 	heroReady = true;
 };
-heroImage.src = "images/hero.png";
+//heroImage.src = "images/hero.png";
 
 // Monster image
+
 var monsterReady = false;
-var monsterImage = new Image();
+var monsterImage = new Image ();
 monsterImage.onload = function () {
 	monsterReady = true;
 };
-monsterImage.src = "images/monster.png";
+monsterImage.src = "images/monster_two.png";
 
-// Game objects
+// 3. Define Game Objects
+// movement in px per seconds
+
 var hero = {
-	speed: 256 // movement in pixels per second
+  speed: 256, 
+	x : 0,
+	y : 0
 };
-var monster = {};
+
+var monster = {
+	x : 0,
+	y : 0
+};
+
 var monstersCaught = 0;
 
-// Handle keyboard controls
+// 4. Player Input
+// handle keyboard controls
+
 var keysDown = {};
 
 addEventListener("keydown", function (e) {
@@ -46,33 +62,37 @@ addEventListener("keydown", function (e) {
 addEventListener("keyup", function (e) {
 	delete keysDown[e.keyCode];
 }, false);
+								 
+// 5. Game Reset-Function
 
-// Reset the game when the player catches a monster
-var reset = function () {
+var reset = function (){
 	hero.x = canvas.width / 2;
 	hero.y = canvas.height / 2;
+	
+// Throw the monster somewhere on the screen randomly
 
-	// Throw the monster somewhere on the screen randomly
 	monster.x = 32 + (Math.random() * (canvas.width - 64));
 	monster.y = 32 + (Math.random() * (canvas.height - 64));
 };
 
-// Update game objects
-var update = function (modifier) {
-	if (38 in keysDown) { // Player holding up
-		hero.y -= hero.speed * modifier;
-	}
-	if (40 in keysDown) { // Player holding down
-		hero.y += hero.speed * modifier;
-	}
-	if (37 in keysDown) { // Player holding left
-		hero.x -= hero.speed * modifier;
-	}
-	if (39 in keysDown) { // Player holding right
-		hero.x += hero.speed * modifier;
-	}
+// 6. Updating Objects
 
-	// Are they touching?
+var update = function (modifier) {
+	if (38 in keysDown) { // Player holding the up arrow-btn
+	hero.y -= hero.speed * modifier;
+	}
+	if (40 in keysDown) { // Player holding the down-btn
+	hero.y += hero.speed * modifier;
+	}
+	if (37 in keysDown) { // Player holding the left-btn
+	hero.x -= hero.speed * modifier;
+	} 
+	if (39 in keysDown) { // Player holding the right-btn
+	hero.x += hero.speed * modifier;
+	}
+	
+	// Update Loop --> Looks to update if player and monster are touching eachother
+
 	if (
 		hero.x <= (monster.x + 32)
 		&& monster.x <= (hero.x + 32)
@@ -84,38 +104,42 @@ var update = function (modifier) {
 	}
 };
 
-// Draw everything
+// 7. Render Objects
+// Draw all the stuff to the screen
+
 var render = function () {
-	if (bgReady) {
+	if (bgready) {
 		ctx.drawImage(bgImage, 0, 0);
 	}
-
+	
 	if (heroReady) {
 		ctx.drawImage(heroImage, hero.x, hero.y);
 	}
-
+	
 	if (monsterReady) {
 		ctx.drawImage(monsterImage, monster.x, monster.y);
 	}
 
-	// Score
-	ctx.fillStyle = "rgb(250, 250, 250)";
-	ctx.font = "24px Helvetica";
+	// The score system
+
+	ctx.fillstyle = "rgb(100, 100, 250)";
+	ctx.font = "20px Helvetica";
 	ctx.textAlign = "left";
 	ctx.textBaseline = "top";
-	ctx.fillText("Goblins caught: " + monstersCaught, 32, 32);
+	ctx.fillText("Goblins caught: " + monstersCaught, 48, 48);
 };
 
-// The main game loop
-var main = function () {
+// 8. Main Game Loop
+
+var main = function() {
 	var now = Date.now();
 	var delta = now - then;
-
+	
 	update(delta / 1000);
 	render();
-
+	
 	then = now;
-
+	
 	// Request to do this again ASAP
 	requestAnimationFrame(main);
 };
@@ -127,4 +151,4 @@ requestAnimationFrame = w.requestAnimationFrame || w.webkitRequestAnimationFrame
 // Let's play this game!
 var then = Date.now();
 reset();
-main();
+main(); 
