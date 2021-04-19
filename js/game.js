@@ -23,7 +23,7 @@ var heroImage = new Image();
 heroImage.onload = function () {
 	heroReady = true;
 };
-//heroImage.src = "images/hero.png";
+heroImage.src = "images/spaceship.png";
 
 // Monster image
 
@@ -122,11 +122,12 @@ var render = function () {
 
 	// The score system
 
-	ctx.fillstyle = "rgb(100, 100, 250)";
+	ctx.fillStyle = 'white';
+
 	ctx.font = "20px Helvetica";
 	ctx.textAlign = "left";
 	ctx.textBaseline = "top";
-	ctx.fillText("Goblins caught: " + monstersCaught, 48, 48);
+	ctx.fillText("Astronauts: " + monstersCaught, 48, 48);
 };
 
 // 8. Main Game Loop
