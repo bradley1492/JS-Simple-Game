@@ -32,7 +32,7 @@ var monsterImage = new Image ();
 monsterImage.onload = function () {
 	monsterReady = true;
 };
-monsterImage.src = "images/monster_two.png";
+monsterImage.src = "images/enemy_six.png";
 
 // 3. Define Game Objects
 // movement in px per seconds
